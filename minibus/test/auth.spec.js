@@ -22,6 +22,8 @@ test('Fails with 401 authentication when invalid token provided', async (t) => {
 	const { mf } = t.context;
 	const token = await createTestToken();
 
+	console.log('token', token);
+
 	const response = await mf.dispatchFetch('https://localhost:8787', {
 		method: 'POST',
 		headers: { Authorization: `${token}` }, // Not Basic /token/

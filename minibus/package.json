@@ -11,9 +11,11 @@
 		"dev": "miniflare dist/worker.mjs --watch --debug -m",
 		"test": "npm run build && npm run test:worker",
 		"test:worker": "ava --verbose test/*.spec.js",
+		"test:auth": "ava --verbose test/auth.spec.js",
 		"lint": "standard"
 	},
 	"dependencies": {
+		"firebase": "^9.21.0",
 		"ipfs-core-utils": "^0.15.1",
 		"itty-router": "^2.6.1",
 		"multiformats": "^9.7.0",

@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/alexmiller/.nvm/versions/node/v18.12.1/bin/node /Users/alexmiller/.nvm/versions/node/v18.12.1/bin/yarn build
+  /Users/alexmiller/.nvm/versions/node/v18.12.1/bin/node /Users/alexmiller/.nvm/versions/node/v18.12.1/bin/yarn format
 
 PATH: 
   /Library/Developer/CommandLineTools/usr/libexec/git-core:/usr/local/opt/openjdk/bin:/Users/alexmiller/.docker/bin:/Users/alexmiller/.nvm/versions/node/v18.12.1/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/alexmiller/Library/Python/3.9/bin:/usr/local/go/bin:/usr/local/MacGPG2/bin:/usr/local/opt/openjdk/bin:/Users/alexmiller/.docker/bin:/Users/alexmiller/.nvm/versions/node/v18.12.1/bin:/Users/alexmiller/.cargo/bin

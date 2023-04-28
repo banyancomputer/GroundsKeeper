@@ -1,7 +1,7 @@
 export default {
-	// nonSemVerExperiments: {
-	//   configurableModuleFormat: true
-	// },
+	nonSemVerExperiments: {
+	  configurableModuleFormat: true
+	},
 	files: ['test/*.spec.js'],
 	timeout: '5m',
 	concurrency: 1,

@@ -8,14 +8,14 @@
 	"license": "MIT",
 	"private": true,
 	"workspaces": [
-		"cloudflare",
-		"firebase"
+		"./minibus",
+		"./functions"
 	],
 	"scripts": {
 		"format": "prettier --write .",
 		"prepare": "husky install",
 		"build": "yarn workspaces run build",
-		"test": "yarn workspaces run test",
+		"test": "yarn workspaces run build && firebase emulators:exec 'yarn workspaces functions test && yarn workspaces minibus test'"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.6.1",
@@ -24,7 +24,9 @@
 		"prettier": "^2.8.8"
 	},
 	"engines": {
-		"yarn": ">=1.22.0",
-		"npm": "please-use-yarn"
+		"npm": ">=7.0.0"
+	},
+	"dependencies": {
+		"firebase-tools": "^11.29.1"
 	}
 }
