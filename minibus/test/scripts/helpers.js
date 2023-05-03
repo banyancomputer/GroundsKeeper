@@ -1,7 +1,6 @@
 import { globals } from './worker-globals.js';
 
-export async function createTestToken() {
+export function createTestToken() {
 	const token = globals.SECRET;
-
 	return token;
 }

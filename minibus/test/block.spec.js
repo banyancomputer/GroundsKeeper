@@ -22,8 +22,6 @@ test.beforeEach(async (t) => {
 test('can post and get block with default multihash', async (t) => {
 	const { mf, token } = t.context;
 
-	console.log('token', token);
-
 	const data = JSON.stringify({ hello: 'world' });
 	const postBlob = new Blob([data]);
 
@@ -33,7 +31,6 @@ test('can post and get block with default multihash', async (t) => {
 		headers: { Authorization: `Basic ${token}` },
 	});
 	const blockPostResult = await postResponse.json();
-	console.log('blockPostResult', blockPostResult);
 	t.truthy(blockPostResult.multihash);
 
 	const getResponse = await mf.dispatchFetch(
@@ -49,137 +46,137 @@ test('can post and get block with default multihash', async (t) => {
 	t.deepEqual(data, getData);
 });
 
-// test('can post and get block with different multihash encoding', async (t) => {
-// 	const { mf, token } = t.context;
+test('can post and get block with different multihash encoding', async (t) => {
+	const { mf, token } = t.context;
 
-// 	const data = JSON.stringify({ hello: 'world' });
-// 	const postBlob = new Blob([data]);
+	const data = JSON.stringify({ hello: 'world' });
+	const postBlob = new Blob([data]);
 
-// 	const postResponse = await mf.dispatchFetch('https://localhost:8787', {
-// 		method: 'POST',
-// 		body: postBlob,
-// 		headers: { Authorization: `Basic ${token}` },
-// 	});
-// 	const blockPostResult = await postResponse.json();
-// 	t.truthy(blockPostResult.multihash);
+	const postResponse = await mf.dispatchFetch('https://localhost:8787', {
+		method: 'POST',
+		body: postBlob,
+		headers: { Authorization: `Basic ${token}` },
+	});
+	const blockPostResult = await postResponse.json();
+	t.truthy(blockPostResult.multihash);
 
-// 	const b58Bytes = base58btc.decode(blockPostResult.multihash);
-// 	const b16Multihash = base16.encode(b58Bytes);
+	const b58Bytes = base58btc.decode(blockPostResult.multihash);
+	const b16Multihash = base16.encode(b58Bytes);
 
-// 	const getResponse = await mf.dispatchFetch(
-// 		`https://localhost:8787/${b16Multihash}`,
-// 		{
-// 			headers: { Authorization: `Basic ${token}` },
-// 		}
-// 	);
-// 	const getBlob = await getResponse.blob();
-// 	t.deepEqual(postBlob.size, getBlob.size);
+	const getResponse = await mf.dispatchFetch(
+		`https://localhost:8787/${b16Multihash}`,
+		{
+			headers: { Authorization: `Basic ${token}` },
+		}
+	);
+	const getBlob = await getResponse.blob();
+	t.deepEqual(postBlob.size, getBlob.size);
 
-// 	const getData = await getBlob.text();
-// 	t.deepEqual(data, getData);
-// });
+	const getData = await getBlob.text();
+	t.deepEqual(data, getData);
+});
 
-// test('fails to get block not previously added', async (t) => {
-// 	const { mf, token } = t.context;
+test('fails to get block not previously added', async (t) => {
+	const { mf, token } = t.context;
 
-// 	const validMultihash = 'zQmYGx7Wzqe5prvEsTSzYBQN8xViYUM9qsWJSF5EENLcNmM';
-// 	const getResponse = await mf.dispatchFetch(
-// 		`https://localhost:8787/${validMultihash}`,
-// 		{
-// 			headers: { Authorization: `Basic ${token}` },
-// 		}
-// 	);
+	const validMultihash = 'zQmYGx7Wzqe5prvEsTSzYBQN8xViYUM9qsWJSF5EENLcNmM';
+	const getResponse = await mf.dispatchFetch(
+		`https://localhost:8787/${validMultihash}`,
+		{
+			headers: { Authorization: `Basic ${token}` },
+		}
+	);
 
-// 	t.deepEqual(getResponse.status, 404);
-// 	t.deepEqual(await getResponse.text(), '"Requested block not found"');
-// });
+	t.deepEqual(getResponse.status, 404);
+	t.deepEqual(await getResponse.text(), '"Requested block not found"');
+});
 
-// test('can post and block head', async (t) => {
-// 	const { mf, token } = t.context;
+test('can post and block head', async (t) => {
+	const { mf, token } = t.context;
 
-// 	const data = JSON.stringify({ hello: 'world' });
-// 	const postBlob = new Blob([data]);
+	const data = JSON.stringify({ hello: 'world' });
+	const postBlob = new Blob([data]);
 
-// 	const postResponse = await mf.dispatchFetch('https://localhost:8787', {
-// 		method: 'POST',
-// 		body: postBlob,
-// 		headers: { Authorization: `Basic ${token}` },
-// 	});
-// 	const blockPostResult = await postResponse.json();
-// 	t.truthy(blockPostResult.multihash);
+	const postResponse = await mf.dispatchFetch('https://localhost:8787', {
+		method: 'POST',
+		body: postBlob,
+		headers: { Authorization: `Basic ${token}` },
+	});
+	const blockPostResult = await postResponse.json();
+	t.truthy(blockPostResult.multihash);
 
-// 	const headResponse = await mf.dispatchFetch(
-// 		`https://localhost:8787/${blockPostResult.multihash}`,
-// 		{
-// 			method: 'HEAD',
-// 			headers: { Authorization: `Basic ${token}` },
-// 		}
-// 	);
-// 	t.deepEqual(
-// 		postBlob.size,
-// 		Number(headResponse.headers.get('content-length'))
-// 	);
-// });
+	const headResponse = await mf.dispatchFetch(
+		`https://localhost:8787/${blockPostResult.multihash}`,
+		{
+			method: 'HEAD',
+			headers: { Authorization: `Basic ${token}` },
+		}
+	);
+	t.deepEqual(
+		postBlob.size,
+		Number(headResponse.headers.get('content-length'))
+	);
+});
 
-// test('head block fails when not previously added', async (t) => {
-// 	const { mf, token } = t.context;
+test('head block fails when not previously added', async (t) => {
+	const { mf, token } = t.context;
 
-// 	const validMultihash = 'zQmYGx7Wzqe5prvEsTSzYBQN8xViYUM9qsWJSF5EENLcNmM';
-// 	const headResponse = await mf.dispatchFetch(
-// 		`https://localhost:8787/${validMultihash}`,
-// 		{
-// 			method: 'HEAD',
-// 			headers: { Authorization: `Basic ${token}` },
-// 		}
-// 	);
+	const validMultihash = 'zQmYGx7Wzqe5prvEsTSzYBQN8xViYUM9qsWJSF5EENLcNmM';
+	const headResponse = await mf.dispatchFetch(
+		`https://localhost:8787/${validMultihash}`,
+		{
+			method: 'HEAD',
+			headers: { Authorization: `Basic ${token}` },
+		}
+	);
 
-// 	t.deepEqual(headResponse.status, 404);
-// 	t.deepEqual(await headResponse.text(), '"Requested block not found"');
-// });
+	t.deepEqual(headResponse.status, 404);
+	t.deepEqual(await headResponse.text(), '"Requested block not found"');
+});
 
-// test('fails to get block when non supported multihash prefix is provided', async (t) => {
-// 	const { mf, token } = t.context;
+test('fails to get block when non supported multihash prefix is provided', async (t) => {
+	const { mf, token } = t.context;
 
-// 	const unsupportedMultihash =
-// 		'w122093a23971a914e5eacbf0a8d25154cda309c3c1c72fbb9914d47c60f3cb681588';
-// 	const getResponse = await mf.dispatchFetch(
-// 		`https://localhost:8787/${unsupportedMultihash}`,
-// 		{
-// 			headers: { Authorization: `Basic ${token}` },
-// 		}
-// 	);
+	const unsupportedMultihash =
+		'w122093a23971a914e5eacbf0a8d25154cda309c3c1c72fbb9914d47c60f3cb681588';
+	const getResponse = await mf.dispatchFetch(
+		`https://localhost:8787/${unsupportedMultihash}`,
+		{
+			headers: { Authorization: `Basic ${token}` },
+		}
+	);
 
-// 	t.deepEqual(getResponse.status, 400);
-// 	t.deepEqual(await getResponse.text(), '"Provided encoded base not found"');
-// });
+	t.deepEqual(getResponse.status, 400);
+	t.deepEqual(await getResponse.text(), '"Provided encoded base not found"');
+});
 
-// test('redirects to get multihash if tried to get cid', async (t) => {
-// 	const { mf, token } = t.context;
+test('redirects to get multihash if tried to get cid', async (t) => {
+	const { mf, token } = t.context;
 
-// 	const data = JSON.stringify({ hello: 'world' });
-// 	const postBlob = new Blob([data]);
+	const data = JSON.stringify({ hello: 'world' });
+	const postBlob = new Blob([data]);
 
-// 	const postResponse = await mf.dispatchFetch('https://localhost:8787', {
-// 		method: 'POST',
-// 		body: postBlob,
-// 		headers: { Authorization: `Basic ${token}` },
-// 	});
-// 	const blockPostResult = await postResponse.json();
-// 	t.truthy(blockPostResult.multihash);
+	const postResponse = await mf.dispatchFetch('https://localhost:8787', {
+		method: 'POST',
+		body: postBlob,
+		headers: { Authorization: `Basic ${token}` },
+	});
+	const blockPostResult = await postResponse.json();
+	t.truthy(blockPostResult.multihash);
 
-// 	const digestBlob = new Uint8Array(await new Blob([data]).arrayBuffer());
-// 	const digest = await sha256.digest(digestBlob);
-// 	const cid = CID.createV1(raw.code, digest);
+	const digestBlob = new Uint8Array(await new Blob([data]).arrayBuffer());
+	const digest = await sha256.digest(digestBlob);
+	const cid = CID.createV1(raw.code, digest);
 
-// 	const getResponseFromCid = await mf.dispatchFetch(
-// 		`https://localhost:8787/${cid.toString()}`,
-// 		{
-// 			headers: { Authorization: `Basic ${token}` },
-// 		}
-// 	);
-// 	t.is(getResponseFromCid.status, 301);
-// 	t.is(
-// 		getResponseFromCid.headers.get('location'),
-// 		`https://localhost:8787/${blockPostResult.multihash}`
-// 	);
-// });
+	const getResponseFromCid = await mf.dispatchFetch(
+		`https://localhost:8787/${cid.toString()}`,
+		{
+			headers: { Authorization: `Basic ${token}` },
+		}
+	);
+	t.is(getResponseFromCid.status, 301);
+	t.is(
+		getResponseFromCid.headers.get('location'),
+		`https://localhost:8787/${blockPostResult.multihash}`
+	);
+});

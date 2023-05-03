@@ -30,7 +30,6 @@ export async function blockPost(request, env) {
 	// base58btc encoded for R2 key
 	const key = base58btc.encode(digestResult.bytes);
 
-	console.log('env.BLOCKSTORE', env.BLOCKSTORE);
 	await env.BLOCKSTORE.put(key, data, {
 		customMetadata: {
 			digestCode: String(sha256.code),

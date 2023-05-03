@@ -31,6 +31,16 @@ export class ExpectedBasicStringError extends HTTPError {
 }
 ExpectedBasicStringError.CODE = 'ERROR_NO_TOKEN';
 
+export class ExpectedBearerStringError extends HTTPError {
+	constructor(
+		msg = 'Expected argument to be a string in the `Bearer {token}` format'
+	) {
+		super(msg, 401);
+		this.name = 'ExpectedBearerString';
+		this.code = ExpectedBearerStringError.CODE;
+	}
+}
+
 export class NoValidTokenError extends HTTPError {
 	constructor(msg = 'Provided token is not valid') {
 		super(msg, 401);
@@ -39,6 +49,14 @@ export class NoValidTokenError extends HTTPError {
 	}
 }
 NoValidTokenError.CODE = 'ERROR_NO_VALID_TOKEN';
+
+export class InvalidTokenError extends HTTPError {
+	constructor(msg = 'Provided token is invalid') {
+		super(msg, 403);
+		this.name = 'InvalidToken';
+		this.code = InvalidTokenError.CODE;
+	}
+}
 
 export class BlockNotFoundError extends HTTPError {
 	constructor(msg = 'Requested block not found') {

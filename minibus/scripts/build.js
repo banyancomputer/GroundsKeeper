@@ -11,6 +11,13 @@ const pkg = JSON.parse(
 	fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8')
 );
 
+const serviceAccount = JSON.parse(
+	fs.readFileSync(
+		path.join(__dirname, '..', '..', 'serviceAccount.json'),
+		'utf8'
+	)
+);
+
 export async function buildCmd(opts) {
 	const sentryRelease = `minibus@${pkg.version}-${
 		opts.env || 'dev'
@@ -28,6 +35,8 @@ export async function buildCmd(opts) {
 			VERSION: JSON.stringify(pkg.version),
 			COMMITHASH: JSON.stringify(git.long(__dirname)),
 			BRANCH: JSON.stringify(git.branch(__dirname)),
+			FIREBASE_SERVICE_ACCOUNT: JSON.stringify(serviceAccount),
+			FIRESTORE_API_URL: JSON.stringify('https://firestore.googleapis.com'),
 			global: 'globalThis',
 		},
 		minify: false, // opts.env !== 'dev',

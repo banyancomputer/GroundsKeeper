@@ -8,14 +8,12 @@
 	"license": "MIT",
 	"private": true,
 	"workspaces": [
-		"./minibus",
-		"./functions"
+		"./packages/*"
 	],
 	"scripts": {
 		"format": "prettier --write .",
 		"prepare": "husky install",
-		"build": "yarn workspaces run build",
-		"test": "yarn workspaces run build && firebase emulators:exec 'yarn workspaces functions test && yarn workspaces minibus test'"
+		"test": "firebase emulators:exec --import test/firebase 'cd minibus && npm run test'"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.6.1",
@@ -24,9 +22,8 @@
 		"prettier": "^2.8.8"
 	},
 	"engines": {
-		"npm": ">=7.0.0"
-	},
-	"dependencies": {
-		"firebase-tools": "^11.29.1"
+		"node": "16",
+		"npm": ">=7.20.0",
+		"yarn": "please-use-npm"
 	}
 }

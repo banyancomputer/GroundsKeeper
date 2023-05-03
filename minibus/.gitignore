@@ -3,6 +3,9 @@
 # dependencies
 node_modules
 
+# Ignore the service account
+serviceAccount.json
+
 # testing
 coverage
 .nyc_output
