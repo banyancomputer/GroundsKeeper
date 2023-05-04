@@ -17,6 +17,7 @@ import { BlockNotFoundError } from '../errors.js';
  */
 export async function blockHead(request, env, ctx) {
 	const multihashOrCid = request.params.multihash;
+	const bucketId = ctx.bucketId;
 
 	// Permanently redirect to multihash if cid provided
 	// Note that CIDv0 and multihash encoded as b58btc will be the same
@@ -28,8 +29,8 @@ export async function blockHead(request, env, ctx) {
 		);
 	}
 
-	const multihash = multihashOrCid;
-	const key = await toBase58btc(multihash, env.bases);
+	const multihash = await toBase58btc(multihashOrCid, env.bases);
+	const key = `${bucketId}/${multihash}`;
 
 	const r2Object = await env.BLOCKSTORE.head(key);
 	if (r2Object) {

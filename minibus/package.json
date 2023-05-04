@@ -10,8 +10,9 @@
 		"build": "tsc && node scripts/cli.js build",
 		"dev": "miniflare dist/worker.mjs --watch --debug -m",
 		"test": "npm run build && npm run test:worker",
-		"test:auth": "ava --verbose test/auth.spec.js",
-		"test:block": "ava --verbose test/block.spec.js",
+		"test:auth": "npm run build && ava --verbose test/auth.spec.js",
+		"test:block": "npm run build && ava --verbose test/block.spec.js",
+		"test:bucket": "npm run build && ava --verbose test/bucket.spec.js",
 		"test:worker": "ava --verbose test/*.spec.js",
 		"lint": "standard"
 	},

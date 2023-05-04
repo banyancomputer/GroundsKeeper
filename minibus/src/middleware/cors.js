@@ -1,5 +1,3 @@
-/* eslint-env serviceworker */
-
 /**
  * @param {import('itty-router').RouteHandler} handler
  * @returns {import('itty-router').RouteHandler}

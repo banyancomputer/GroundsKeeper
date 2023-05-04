@@ -22,6 +22,8 @@ test.beforeEach(async (t) => {
 test('can post and get block with default multihash', async (t) => {
 	const { mf, token } = t.context;
 
+	const [bucketId, _] = token.split(':');
+
 	const data = JSON.stringify({ hello: 'world' });
 	const postBlob = new Blob([data]);
 

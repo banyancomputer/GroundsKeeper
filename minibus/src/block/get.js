@@ -13,16 +13,19 @@ import { BlockNotFoundError } from '../errors.js';
  *
  * @param {Request} request
  * @param {Env} env
- * @param {import('../index').Ctx} ctx
+ * @param {import('../index').Ctx} ctx - gauranteed to have bucketId
  */
 export async function blockGet(request, env, ctx) {
-	// Get cached block if exists
+	// Get cached block if exists -- don't permission this for now
+	// How do we want to handle caching? How does formatting requests affect caching?
+	// Does it check if this exact request has been made before? Is this a problem to persist?
 	const cache = caches.default;
 	let res = await cache.match(request);
 	if (res) {
 		return res;
 	}
 
+	const bucketId = ctx.bucketId;
 	const multihashOrCid = request.params.multihash;
 
 	// Permanently redirect to multihash if cid provided
@@ -35,8 +38,8 @@ export async function blockGet(request, env, ctx) {
 		);
 	}
 
-	const multihash = multihashOrCid;
-	const key = await toBase58btc(multihash, env.bases);
+	const multihash = await toBase58btc(multihashOrCid, env.bases);
+	const key = `${bucketId}/${multihash}`;
 
 	const r2Object = await env.BLOCKSTORE.get(key);
 	if (r2Object) {

@@ -1,27 +1,39 @@
 /* eslint-env serviceworker */
-
 import { Router } from 'itty-router';
-
-import { withAuthToken } from './auth.js';
+import * as middleware from './middleware/index.js';
 import { envAll } from './env.js';
-import { errorHandler } from './error-handler.js';
-import { addCorsHeaders, withCorsHeaders } from './cors.js';
+import { errorHandler } from './errors.js';
 import { versionGet } from './version.js';
 import { blockPost, blockGet, blockHead } from './block/index.js';
+import { bucketCreate } from './bucket/index.js';
+import { bucketDelete } from './bucket/delete.js';
 
 const router = Router();
 
 const auth = {
-	'🤲': (handler) => withCorsHeaders(handler),
-	'🔒': (handler) => withCorsHeaders(withAuthToken(handler)),
+	// Open routes
+	'open': (handler) => middleware.cors.withCorsHeaders(handler),
+	// Authenticated routes with Bearer token
+	'bearer': (handler) => middleware.cors.withCorsHeaders(
+		middleware.auth.withBearerAuth(handler)
+	),
+	'basic': (handler) => middleware.cors.withCorsHeaders(
+		middleware.auth.withBasicAuth(handler)
+	),
+	// Authenticated routes with Bearer -> Basic token as fallback
+	'fallback': (handler) => middleware.cors.withCorsHeaders(
+		middleware.auth.withAuth(handler)
+	),
 };
 
 router
 	.all('*', envAll)
-	.get('/version', auth['🤲'](versionGet))
-	.post('/', auth['🔒'](blockPost))
-	.get('/:multihash', auth['🔒'](blockGet))
-	.head('/:multihash', auth['🔒'](blockHead));
+	.get('/version', auth['open'](versionGet))
+	.post('/createBucket', auth['bearer'](bucketCreate))
+	.post('/deleteBucket', auth['bearer'](bucketDelete))
+	.post('/', auth['fallback'](blockPost))
+	.get('/:multihash', auth['fallback'](blockGet))
+	.head('/:multihash', auth['fallback'](blockHead));
 
 /**
  * @param {Error} error
@@ -29,7 +41,7 @@ router
  * @param {import('./env').Env} env
  */
 function serverError(error, request, env) {
-	return addCorsHeaders(request, errorHandler(error, env));
+	return middleware.cors.addCorsHeaders(request, errorHandler(error, env));
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent

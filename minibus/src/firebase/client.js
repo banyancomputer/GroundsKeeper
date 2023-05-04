@@ -1,4 +1,5 @@
 import { generateJWT } from '../utils/jwt.js';
+import { FirebaseError } from '../errors.js';
 
 /**
  * Firebase Client for interacting with the Firebase API.
@@ -28,6 +29,7 @@ export default class FirebaseClient {
 	}
 
 	/**
+	 * TODO: Try and store and read these from the KV store
 	 * Generate the Authorization header for the Firebase API
 	 * @returns {Object} - The Authorization header
 	 * @async
@@ -57,6 +59,8 @@ export default class FirebaseClient {
 		return await fetch(`${this.apiUrl}/${endpoint}`, {
 			...options,
 			headers: await this.authHeader(),
+		}).catch((error) => {
+			throw new FirebaseError(error);
 		});
 	}
 }

@@ -28,3 +28,16 @@ export const generateJWT = async (payload, kid, key, algorithm) => {
 	const signature = sign.signatures[0];
 	return [signature.protected, sign.payload, signature.signature].join('.');
 };
+
+/**
+ * TODO: What stuff do I need to check?
+ * verifyJWT - verifies whether a JWT is valid
+ * @param {*} jwt - the JWT to verify
+ * @param {*} key - the public key file contents -- formatted as string with \n characters
+ * @returns
+ */
+export const verifyJWT = async (jwt, key) => {
+	const publicKey = await jose.JWK.asKey(key.replace(/\\n/g, '\n'), 'pem');
+	const verify = await jose.JWS.createVerify(publicKey).verify(jwt);
+	return verify;
+}
