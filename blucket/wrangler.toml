@@ -1,0 +1,41 @@
+# block-bucket wrangler config.
+name = "minibus"
+main = "./dist/worker.mjs"
+compatibility_date = "2022-05-11"
+compatibility_flags = [ "url_standard" ]
+
+# Use our custom build command.
+[build]
+command = "npm run build"
+
+# Production environment.
+# TODO: Test and deploy to production.
+[env.production]
+name = "block-bucket-production"
+account_id = "3648328bb7b24838c70d601e79891d98" # Banyan Cloudfare account
+route = "block-bucket.banyan.computer/*"
+
+[[env.production.r2_buckets]]
+bucket_name = "blockstore-production"
+binding = "BLOCKSTORE"
+
+# Staging environment.
+# TODO: Test and deploy to staging.
+[env.staging]
+name = "block-bucket-staging"
+account_id = "3648328bb7b24838c70d601e79891d98" # Banyan Cloudfare account
+route = "block-bucket-staging.alex1883.workers.dev/*"
+
+[[env.staging.r2_buckets]]
+bucket_name = "blockstore-staging"
+binding = "BLOCKSTORE"
+
+# Local development environment.
+[miniflare]
+# Secrets are made available and configured in .env.dev.
+env_path = '.env.dev'
+[text_blobs]
+# An additional text blob is made available in the local environment. 
+# You should have a GCP service account JSON file in the root directory of the project.
+FIREBASE_SERVICE_ACCOUNT_BLOB = "../serviceAccount.json"
+

@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "groundskeeper-18560"
+    "default": "groundskeeper-18560",
+    "prod": "groundskeeper-prod",
+    "staging": "groundskeeper-staging"
   }
 }

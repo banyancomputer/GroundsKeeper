@@ -2,11 +2,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
-      // allow read, write: if false;
-      // Allow read and writes by a Service account
-      allow read, write: if true; //if request.auth.uid != null;
-      allow update: if true;
-      allow create: if true;
+      // Allow service accounts to read, write, create, update
+      // Allow test@user.com to do anything:
+      allow read, write, create, update: if request.auth != null && request.auth.uid == 'test@user.com';
+      // allow read, write, create, update: if true; // request.auth != null && request.auth.token.firebase.sign_in_provider == 'google.com';
     }
   }
 }
